@@ -1,9 +1,9 @@
-import time
+from time import sleep
 
 # Serial ports
-leftPort = ""
-rightPort = ""
-nanoPort = ""
+leftPort = "/dev/ttyACM0"
+rightPort = "/dev/ttyUSB0"
+nanoPort = "/dev/ttyUSB1"
 
 # Robot configuration
 #
@@ -50,20 +50,31 @@ rightController.connect(rightPort)
 nanoController = Runtime.start("nanoController", "Arduino")
 nanoController.setBoardNano()
 nanoController.connect(nanoPort)
-time.sleep(3);
+sleep(2);
 
 print("Initialising all servos...")
 jaw = Runtime.start("jaw", "Servo")
 neckRotate = Runtime.start("neckRotate", "Servo")
 neckTilt = Runtime.start("neckTilt", "Servo")
 eyesX = Runtime.start("eyesX", "Servo")
-eyesX = Runtime.start("eyesY", "Servo")
+eyesY = Runtime.start("eyesY", "Servo")
 
 print("Initialising pir")
-pir = Runtime.start('pir', 'Pir')
-pir.attach(rightController, 12)
-pir.isVerbose = True
-pir.enable(1) # 1 is how many time / second we poll the pir
+#pir = Runtime.start('pir', 'Pir')
+#pir.attach(rightController, 12)
+#pir.isVerbose = True
+#pir.enable(1) # 1 is how many time / second we poll the pir
+
+print("Initialising neopixel")
+neopixel = Runtime.start("NeoPixel", "NeoPixel")
+
+speech = Runtime.start("MarySpeech", "MarySpeech")
+speech.setVoice("Spike")
+mouthControl = Runtime.start("MouthControl", "MouthControl")
+mouthControl.mouthClosedPos = 128
+mouthControl.mouthOpenedPos = 174
+mouthControl.attach(jaw)
+mouthControl.attach(speech)
 
 def attachHead():
     jaw.attach(rightController, 53, 174) # closed
@@ -71,6 +82,7 @@ def attachHead():
     neckTilt.attach(rightController, 49, 95, 60) # forward
     eyesX.attach(rightController, 47, 90) # unkown
     eyesY.attach(rightController, 45, 70, 50) # forward
+    print("Head attached.")
 
 def attachArms():
     print("Attaching arms...")
@@ -86,7 +98,7 @@ def attachArms():
     rightPinky.attach(rightController, 2, 170, 90)
 
 def attachNeopixel():
-    neopixel.attach(nano, 3, 16)
+    neopixel.attach(nanoController, 3, 16, 4) # pin 3, 16 pixels, 4 channel colour depth
     
 def detachHead():
     print("Detaching servos...")
@@ -99,39 +111,39 @@ def detachHead():
 def neckTiltDemo():
     print("Neck tilt demo...")
     neckTilt.moveTo(45) # look up
-    time.sleep(1)
+    sleep(1)
     neckTilt.moveTo(135) # look down
-    time.sleep(2)
+    sleep(2)
     neckTilt.moveTo(95) # look forward
-    time.sleep(2)
+    sleep(2)
     
 def eyesDemo():
     print("Eyes demo...")
     eyesY.moveTo(50)
-    time.sleep(1)
+    sleep(1)
     eyesY.moveTo(90)
-    time.sleep(1)
+    sleep(1)
     eyesY.moveTo(70)
-    time.sleep(1)
+    sleep(1)
 
 def lookAround():
     print("look around...")
     neckRotate.moveTo(165)
     neckTilt.moveTo(50)
-    time.sleep(2)
+    sleep(2)
     neckRotate.moveTo(95)
-    time.sleep(2)
+    sleep(2)
     neckTilt.moveTo(90)
-    time.sleep(2)
+    sleep(2)
 
 def lookAroundDown():
     neckRotate.moveTo(45)
     neckTilt.moveTo(135)
-    time.sleep(2)
+    sleep(2)
     neckRotate.moveTo(95)
-    time.sleep(2)
+    sleep(2)
     neckTilt.moveTo(90)
-    time.sleep(1)
+    sleep(1)
 
 def jawDemo():
     print("talk...")
@@ -185,10 +197,11 @@ def neopixelStart():
     speed = 1
     for colour in colours:
         for animation in animations:
-            neopixel.setAnimation(animation, colour[1], colour[2], colour[3], speed)
             print "Running neopixel animation: " + animation + " in " + colour[0]
+            neopixel.setAnimation(animation, colour[1], colour[2], colour[3], speed)
 
 def neopixelStop():
+    print("stopping neopixel annimation...")
     neopixel.animationStop()
 
 def neoColour(colour):
@@ -209,12 +222,14 @@ def publishSense(event):
   else:
     neoColour("Green")
 
-pir.addListener("publishSense", python.name, "publishSense")
+#pir.addListener("publishSense", python.name, "publishSense")
 
-time.sleep(4)
+sleep(1)
 
 # complete demo
+attachNeopixel()
 neopixelStart()
-headDemo()
-neopixelStop()
+# headDemo()
+#neopixelStop()
 
+print("Ready")

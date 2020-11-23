@@ -1,0 +1,5 @@
+attachHead()
+mouth = Runtime.getService("MarySpeech")
+mouth.speak("This is an example of the speak method.")
+mouth.speak("See how the script finished before I have finished speaking")
+print('finished')
