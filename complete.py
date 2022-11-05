@@ -290,6 +290,7 @@ def neoStart(animation, colour, speed = 1):
 def neoStop():
     print("stopping neopixel annimation...")
     neopixel.animationStop()
+    neoColour(BLACK)
 
 def neoColour(colour):
   print colour[0]
