@@ -175,7 +175,7 @@ def detchArms():
     #leftRingFinger.detach()
     #leftPinky.detach()
 
-def detachStomach()
+def detachStomach():
     print("Detaching stomach...")
     stomachTilt.detach()
     stomachRotate.detach()
