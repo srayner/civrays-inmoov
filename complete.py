@@ -37,8 +37,8 @@ nanoPort = "/dev/nano"
 # leftMajeure         left         4     0(closed)   170
 # leftRingFinger      left         3     0(closed)   170(open)
 # leftPinky           left         2     0(closed)   170(open)
-# stomach tilt        right        27    70          110            90(center)
-# stomach rotate      right        28    70          110            90(center)
+# stomachTilt         right        27    70          110            90(center)
+# stomachRotate       right        28    70          110            90(center)
 # neopixel            nano         3
     
     
@@ -55,6 +55,7 @@ nanoController.setBoardNano()
 nanoController.connect(nanoPort)
 sleep(2);
 
+# All servos
 print("Initialising all servos...")
 jaw = Runtime.start("jaw", "Servo")
 neckRotate = Runtime.start("neckRotate", "Servo")
@@ -64,16 +65,36 @@ eyesY = Runtime.start("eyesY", "Servo")
 rightOmoplate = Runtime.start("rightOmoPlate", "Servo")
 rightShoulder = Runtime.start("rightShoulder", "Servo")
 rightRotate = Runtime.start("rightRotate", "Servo")
+rightBicep = Runtime.start("rightBicep", "Servo")
+rightWrist = Runtime.start("rightWrist", "Servo")
+rightThumb = Runtime.start("rightThumb")
+rightIndex = Runtime.start("rightIndex")
+rightMajeure = Runtime.start("rightMajeure")
+rightRingFinger = Runtime.start("rightRingFinger")
+rightPinky = Runtime.start("rightPinky")
+leftOmoplate = Runtime.start("leftOmoPlate", "Servo")
+leftShoulder = Runtime.start("leftShoulder", "Servo")
+leftRotate = Runtime.start("leftRotate", "Servo")
+leftBicep = Runtime.start("leftBicep", "Servo")
+leftWrist = Runtime.start("leftWrist", "Servo")
+leftThumb = Runtime.start("leftThumb")
+leftIndex = Runtime.start("leftIndex")
+leftMajeure = Runtime.start("leftMajeure")
+leftRingFinger = Runtime.start("leftRingFinger")
+leftPinky = Runtime.start("leftPinky")
+stomachTilt = Runtime.start("stomachTilt", "Servo")
+stomachRotate = Runtime.start("stomachRotate", "Servo")
 
-print("Initialising pir")
+print("Initialising pir...")
 #pir = Runtime.start('pir', 'Pir')
 #pir.attach(rightController, 12)
 #pir.isVerbose = True
-#pir.enable(1) # 1 is how many time / second we poll the pir
+#pir.enable(1) # 1 is how many times per second we poll the pir
 
-print("Initialising neopixel")
+print("Initialising neopixel...")
 neopixel = Runtime.start("NeoPixel", "NeoPixel")
 
+print("Initialising speech and mouth control...")
 speech = Runtime.start("MarySpeech", "MarySpeech")
 speech.setVoice("Spike")
 mouthControl = Runtime.start("MouthControl", "MouthControl")
@@ -83,16 +104,16 @@ mouthControl.attach(jaw)
 mouthControl.attach(speech)
 
 def attachHead():
+    print("Attaching head...")
     jaw.attach(rightController, 53, 174) # closed
     neckRotate.attach(rightController, 51, 95, 60) # forward
     neckTilt.attach(rightController, 49, 95, 60) # forward
     eyesX.attach(rightController, 47, 90) # unkown
     eyesY.attach(rightController, 45, 70, 50) # forward
-    print("Head attached.")
 
 def attachArms():
     print("Attaching arms...")
-    rightOmoplate.attach(rightController, 9, 80)
+    #rightOmoplate.attach(rightController, 9, 80)
     rightShoulder.attach(rightController, 10, 0, 80)
     rightRotate.attach(rightController, 11, 90, 80)
     #rightElbow.attach(rightController, 8, 0, 80)
@@ -102,17 +123,62 @@ def attachArms():
     #rightMajeure.attach(rightController, 4, 170, 90)
     #rightRingFinger.attach(rightController, 3, 170, 90)
     #rightPinky.attach(rightController, 2, 170, 90)
+    #leftOmoplate.attach(rightController, 9, 80)
+    leftShoulder.attach(rightController, 10, 0, 80)
+    leftRotate.attach(rightController, 11, 90, 80)
+    #leftElbow.attach(rightController, 8, 0, 80)
+    #leftWrist.attach(rightController, 7, 170, -1.0)
+    #leftThumb.attach(rightController, 5, 170, 90)
+    #leftIndex.attach(rightController, 6, 170, 90)
+    #leftMajeure.attach(rightController, 4, 170, 90)
+    #leftRingFinger.attach(rightController, 3, 170, 90)
+    #leftPinky.attach(rightController, 2, 170, 90)
+
+def attachStomach():
+    print("Attaching stomach...")
+    stomachTilt.attach(rightController, 27, 90, 90) # upright
+    stomachRotate.attach(rightController, 28, 90, 90) # forward
 
 def attachNeopixel():
+    print("Attaching neopixel...")
     neopixel.attach(nanoController, 3, 16, 4) # pin 3, 16 pixels, 4 channel colour depth
     
 def detachHead():
+    print("Detaching head...")
     jaw.detach()
     neckRotate.detach()
     neckTilt.detach()
     eyesX.detach()
     eyesY.detach()
     print("Head detached.")
+
+def detchArms():
+    print("Detaching arms...")
+    #rightOmoplate.detach()
+    rightShoulder.detach()
+    rightRotate.detach()
+    #rightElbow.detach()
+    #rightWrist.detach()
+    #rightThumb.detach()
+    #rightIndex.detach()
+    #rightMajeure.detach()
+    #rightRingFinger.detach()
+    #rightPinky.detach()
+    #leftOmoplate.detach()
+    leftShoulder.detach()
+    leftRotate.detach()
+    #leftElbow.detach()
+    #leftWrist.detach()
+    #leftThumb.detach()
+    #leftIndex.detach()
+    #leftMajeure.detach()
+    #leftRingFinger.detach()
+    #leftPinky.detach()
+
+def detachStomach()
+    print("Detaching stomach...")
+    stomachTilt.detach()
+    stomachRotate.detach()
     
 def neckTiltDemo():
     print("Neck tilt demo...")
@@ -247,10 +313,7 @@ def publishSense(event):
 
 sleep(1)
 
-# complete demo
+# ready status
 attachNeopixel()
-#neopixelStart()
-# headDemo()
-#neopixelStop()
-
+neoColour(GREEN)
 print("Ready")
