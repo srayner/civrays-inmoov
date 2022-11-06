@@ -152,7 +152,7 @@ def detachHead():
     eyesY.detach()
     print("Head detached.")
 
-def detchArms():
+def detachArms():
     print("Detaching arms...")
     #rightOmoplate.detach()
     rightShoulder.detach()
