@@ -37,8 +37,8 @@ nanoPort = "/dev/nano"
 # leftMajeure         left         4     0(closed)   170
 # leftRingFinger      left         3     0(closed)   170(open)
 # leftPinky           left         2     0(closed)   170(open)
-# stomachTilt         right        27    75          120            97(center)
-# stomachRotate       right        28    70          110            90(center)
+# stomachTilt         left         27    75          120            97(center)
+# stomachRotate       left         28    70          110            90(center)
 # neopixel            nano         3
     
     
@@ -136,8 +136,8 @@ def attachArms():
 
 def attachStomach():
     print("Attaching stomach...")
-    stomachTilt.attach(rightController, 27, 97, 70) # upright
-    stomachRotate.attach(rightController, 28, 90, 70) # forward
+    stomachTilt.attach(leftController, 27, 97, 70) # upright
+    stomachRotate.attach(leftController, 28, 90, 70) # forward
 
 def attachNeopixel():
     print("Attaching neopixel...")
