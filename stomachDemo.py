@@ -4,13 +4,13 @@ attachStomach()
 neoStart("Theater Chase", PURPLE)
 
 # Move one way
-stomachTilt.moveTo(110)
-stomachRotate.moveTo(110)
+stomachTilt.moveTo(115)
+stomachRotate.moveTo(115)
 sleep(2)
 
 # Move the other way
 stomachTilt.moveTo(75)
-stomachRotate.moveTo(70)
+stomachRotate.moveTo(75)
 sleep(4)
 
 # return to center
