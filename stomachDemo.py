@@ -4,7 +4,7 @@ attachStomach()
 neoStart("Theater Chase", PURPLE)
 
 # Move one way
-stomachTilt.moveTo(105)
+stomachTilt.moveTo(110)
 stomachRotate.moveTo(110)
 sleep(2)
 
@@ -14,8 +14,8 @@ stomachRotate.moveTo(70)
 sleep(4)
 
 # return to center
-stomachTilt.moveTo(90)
-stomachRotate.moveTo(90)
+stomachTilt.moveTo(97)
+stomachRotate.moveTo(97)
 sleep(2)
 
 # Detach
